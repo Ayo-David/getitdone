@@ -1,6 +1,9 @@
 .App {
   text-align: center;
 }
+.is__done {
+  text-decoration: line-through;
+}
 
 .App-logo {
   height: 40vmin;
