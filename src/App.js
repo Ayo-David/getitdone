@@ -1,23 +1,25 @@
 import { useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import AutoSuggest from './autosuggest';
+import LikeDislike from './toptall';
+import Typetask from './Typetask';
 import './App.css';
 
 function App() {
 
-  const mytodos = [
-    {
-      'id': 1,
-      'task': 'Go to the Mechanic',
-      'done': false
-    },
-    {
-      'id': 2,
-      'task': 'I\'m comming to the office',
-      'done': false
-    },
+  // const mytodos = [
+  //   {
+  //     'id': 1,
+  //     'task': 'Go to the Mechanic',
+  //     'done': false
+  //   },
+  //   {
+  //     'id': 2,
+  //     'task': 'I\'m comming to the office',
+  //     'done': false
+  //   },
 
-  ]
+  // ]
 
   const [todos, setTodos] = useState([])
   const [input, setInput] = useState('')
@@ -32,14 +34,14 @@ function App() {
     setInput('')
   }
   const toggleDone = (id) => {
+    todos.map((todo) => console.log(todo.id))
     let i = countUndone
     let mytass = todos.map((todo) => {
-      console.log(todo.id, todo.task, countUndone);
+      //console.log(todo.id, todo.task, countUndone);
       if (todo.id === id) {
         setCountUndone(--i)
         return { ...todo, done: !todo.done }
       } else {
-
         return todo
       }
     })
@@ -61,12 +63,18 @@ function App() {
 
   }
 
+  const onchange = (e) => {
+    setInput(e.target.value)
+    console.log(input)
+  }
+
   return (
     <Router>
       <div className="App">
         <Switch>
           <Route path='/' exact>
             <h1>Get things done faster</h1>
+            {/* <Typetask value={input} onChang={onchange} onClic={addTodo} /> */}
             <form action=""> {/* to use button as form submission and press enter to submit*/}
               <input onChange={e => setInput(e.target.value)} value={input} type="text" />
               <button disabled={!input} onClick={addTodo} type='submit'>Add Todo</button>
@@ -78,6 +86,8 @@ function App() {
           </Route>
           <Route path='/autosuggest'>
             <AutoSuggest />
+          </Route><Route path='/toptal'>
+            <LikeDislike />
           </Route>
         </Switch>
 
