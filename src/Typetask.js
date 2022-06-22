@@ -10,7 +10,7 @@ const Typetask = ({ value, onChang, onClic }) => {
         <div>
             <input onChange={(e) => {
                 setInpu(e.target.value)
-            }} value={inpu} type="text" />
+            }} value={value} type="text" />
             <button disabled={!value} onClick={onClic} type='submit'>Add Todo</button>
 
         </div>
