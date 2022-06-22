@@ -4,6 +4,9 @@ import AutoSuggest from './autosuggest';
 import LikeDislike from './toptall';
 import Typetask from './Typetask';
 import './App.css';
+import Todo from './Todo';
+import AutoSug from './autoSugg';
+import LikeDislike2 from './LikeDislike';
 
 function App() {
 
@@ -89,11 +92,20 @@ function App() {
           </Route><Route path='/toptal'>
             <LikeDislike />
           </Route>
+          <Route path='/likes'>
+            <LikeDislike2 />
+          </Route>
+          <Route path='/todo'>
+            <Todo />
+          </Route>
+          <Route path='/auto'>
+            <AutoSug />
+          </Route>
         </Switch>
 
 
       </div >
-    </Router>
+    </Router >
   );
 }
 
