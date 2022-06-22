@@ -68,7 +68,6 @@ const AutoSuggest = () => {
             let class_name
             index === activeSuggestionIndex && (class_name = 'active')
             return <li className={class_name} key={index} onClick={selectClicked} >{suggestion}</li>
-
         })
         return (
             <div >
