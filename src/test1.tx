@@ -1,0 +1,441 @@
+Mythic Quest
+EASY
+Brief
+For a game of Mythic Quest, each player starts by generating an avatar they can play with.
+
+This avatar has six main abilities:
+
+strength
+dexterity
+constitution
+intelligence
+wisdom
+charisma
+These six abilities have scores that are determined randomly. You do this by rolling four 6-sided dice and record the sum of the largest three dice. You do this six times, once for each ability.
+
+Your avatar's initial hitpoints are 10 + your avatar's constitution modifier. You find your avatar's constitution modifier by subtracting 10 from your avatar's constitution, divide by 2 and round down.
+
+Write a random avatar generator that follows the rules above.
+
+The six throws of four dice may look like:
+
+5, 3, 1, 6: You discard the 1 and sum 5 + 3 + 6 = 14, which you assign to strength.
+3, 2, 5, 3: You discard the 2 and sum 3 + 5 + 3 = 11, which you assign to dexterity.
+1, 1, 1, 1: You discard the 1 and sum 1 + 1 + 1 = 3, which you assign to constitution.
+2, 1, 6, 6: You discard the 1 and sum 2 + 6 + 6 = 14, which you assign to intelligence.
+3, 5, 3, 4: You discard the 3 and sum 5 + 3 + 4 = 12, which you assign to wisdom.
+6, 6, 6, 6: You discard the 6 and sum 6 + 6 + 6 = 18, which you assign to charisma.
+Because constitution is 3, the constitution modifier is -4 and the hitpoints are 6.
+
+=========
+export class Avatar {
+  constructor() {
+    this.strength = Avatar.rollAbility();
+    this.dexterity = Avatar.rollAbility();
+    this.constitution = Avatar.rollAbility();
+    this.intelligence = Avatar.rollAbility();
+    this.wisdom = Avatar.rollAbility();
+    this.charisma = Avatar.rollAbility();
+    this.hitpoints = 10 + abilityModifier(this.constitution);
+  }
+
+  static rollAbility() {
+    let diceRolls = [];
+
+    for (let i = 0; i < 4; i++) {
+      diceRolls.push(Math.floor(Math.random() * 5) + 1);
+    }
+
+    return diceRolls
+      .sort()
+      .slice(1)
+      .reduce((partialSum, num) => partialSum + num, 0);
+  }
+}
+
+export const abilityModifier = (abilityScore) => {
+  if (abilityScore < 3) {
+    throw new Error("Ability scores must be at least 3");
+  }
+
+  if (abilityScore > 18) {
+    throw new Error("Ability scores can be at most 18");
+  }
+
+  return Math.floor((abilityScore - 10) / 2);
+};
+
+
+2. Dog Barks
+EASY
+Brief
+Your task is to convert a number into a string that contains dog bark sounds corresponding to certain potential factors.
+
+A factor is a number that evenly divides into another number, leaving no remainder.
+
+The rules of dog-barks are that if a given number:
+
+has 3 as a factor, add 'Woof' to the result.
+has 5 as a factor, add 'Ruff' to the result.
+has 7 as a factor, add 'Bork' to the result.
+does not have any of 3, 5, or 7 as a factor, the result should be the digits of the number.
+Examples
+28 has 7 as a factor, but not 3 or 5, so the result would be "Bork".
+30 has both 3 and 5 as factors, but not 7, so the result would be "WoofRuff".
+34 is not factored by 3, 5, or 7, so the result would be "34".
+
+
+===========
+xport const convert = (n) => {
+  let result = "";
+  if (n % 3 === 0) {
+    result += "Woof";
+  }
+  if (n % 5 === 0) {
+    result += "Ruff";
+  }
+  if (n % 7 === 0) {
+    result += "Bork";
+  }
+  return result === "" ? n.toString() : result;
+};
+
+====
+3. Truck Simulator
+EASY
+Brief
+Your assignment is to write a truck simulator.
+
+A truck factory's test facility needs a program to verify truck movements.
+
+There are three possible movements:
+
+turn right
+turn left
+advance
+Trucks are placed on a hypothetical infinite grid, facing a particular direction (north, east, south, or west) at a set of {x,y} coordinates, e.g., {3,8}, with coordinates increasing to the north and east.
+
+The truck then receives a number of instructions, at which point the testing facility verifies the truck's new position, and in which direction it is pointing.
+
+The letter-string "RAALAL" means:
+Turn right
+Advance twice
+Turn left
+Advance once
+Turn left yet again
+Say a truck starts at {7, 3} facing north. Then running this stream of instructions should leave it at {9, 4} facing west.
+Setup
+First, install the assignment dependencies:
+
+$ npm install
+Making the test suite pass
+You may execute the tests with:
+
+$ npm test
+
+---
+export class InvalidInputError extends Error {
+  constructor(message) {
+    super();
+    this.message = message || "Invalid Input";
+  }
+}
+
+export class Truck {
+  constructor() {
+    this.coordinates = [0, 0];
+    this.bearing = "north";
+  }
+
+  at(xcoord, ycoord) {
+    this.coordinates = [xcoord, ycoord];
+  }
+
+  orient(direction) {
+    const validDirections = ["north", "south", "east", "west"];
+    if (!validDirections.includes(direction)) {
+      throw new InvalidInputError("Invalid Truck Bearing");
+    }
+
+    this.bearing = direction;
+    return `The truck is pointed ${direction}`;
+  }
+
+  advance() {
+    if (this.bearing === "north") {
+      this.coordinates[1] += 1;
+    } else if (this.bearing === "south") {
+      this.coordinates[1] -= 1;
+    } else if (this.bearing === "east") {
+      this.coordinates[0] += 1;
+    } else if (this.bearing === "west") {
+      this.coordinates[0] -= 1;
+    }
+  }
+
+  turnLeft() {
+    if (this.bearing === "north") {
+      this.orient("west");
+    } else if (this.bearing === "south") {
+      this.orient("east");
+    } else if (this.bearing === "east") {
+      this.orient("north");
+    } else if (this.bearing === "west") {
+      this.orient("south");
+    }
+  }
+
+  turnRight() {
+    if (this.bearing === "north") {
+      this.orient("east");
+    } else if (this.bearing === "south") {
+      this.orient("west");
+    } else if (this.bearing === "east") {
+      this.orient("south");
+    } else if (this.bearing === "west") {
+      this.orient("north");
+    }
+  }
+
+  static instructions(s) {
+    return [...s].map((character) => {
+      switch (character) {
+        case "L":
+          return "turnLeft";
+        case "R":
+          return "turnRight";
+        case "A":
+          return "advance";
+        default:
+          throw new InvalidInputError(`${character} is not a valid instruction character.`);
+      }
+    });
+  }
+
+  place(args) {
+    this.coordinates = [args.x, args.y];
+    this.bearing = args.direction;
+  }
+
+  evaluate(s) {
+    Truck.instructions(s).forEach((instruction) => {
+      this[instruction]();
+    });
+  }
+}
+
+===========
+4. Shirt Store
+MEDIUM
+Brief
+To try and encourage more sales from a popular 5 piece fashion collection, a store owner has decided to offer discounts for customers that buy multiple shirts.
+
+One of any of the five shirts costs $8.
+
+If, however, you buy two different shirts, you get a 5% discount on those two shirts.
+
+If you buy 3 different shirts, you get a 10% discount.
+
+If you buy 4 different shirts, you get a 20% discount.
+
+If you buy all 5, you get a 25% discount.
+
+Note that if you buy four shirts, of which 3 are different, you get a 10% discount on the 3 that form part of a set, but the fourth shirt still costs $8.
+
+Your mission is to write a piece of code to calculate the price of any conceivable shopping basket (containing only shirts of the same collection), giving as big a discount as possible.
+
+For example, how much does this basket of shirts cost?
+
+2 of the first shirt
+2 of the second shirt
+2 of the third shirt
+1 of the fourth shirt
+1 of the fifth shirt
+One way of grouping these 8 shirts is:
+
+1 group of 5 --> 25% discount (1st,2nd,3rd,4th,5th)
++1 group of 3 --> 10% discount (1st,2nd,3rd)
+This would give a total of:
+
+5 shirts at a 25% discount
++3 shirts at a 10% discount
+Resulting in:
+
+5 x (8 - 2.00) == 5 x 6.00 == $30.00
++3 x (8 - 0.80) == 3 x 7.20 == $21.60
+For a total of $51.60
+
+However, a different way to group these 8 shirts is:
+
+1 group of 4 shirts --> 20% discount (1st,2nd,3rd,4th)
++1 group of 4 shirts --> 20% discount (1st,2nd,3rd,5th)
+This would give a total of:
+
+4 shirts at a 20% discount
++4 shirts at a 20% discount
+Resulting in:
+
+4 x (8 - 1.60) == 4 x 6.40 == $25.60
++4 x (8 - 1.60) == 4 x 6.40 == $25.60
+For a total of $51.20
+
+And $51.20 is the price with the biggest discount.
+
+Setup
+First, install the assignment dependencies:
+
+$ npm install
+Making the test suite pass
+You may execute the tests with:
+
+$ npm test
+Evaluation Criteria
+JavaScript best practices
+Show us your work through your commit history
+Completeness: did you complete the features? Are all the tests running?
+Correctness: does the functionality act in sensible, thought-out ways?
+Maintainability: is it written in a clean, maintainable way?
+
+-----
+const BOOK_PRICE = 800;
+const DISCOUNTS = [1, 0.95, 0.9, 0.8, 0.75];
+
+const groupCost = (size) => size * BOOK_PRICE * DISCOUNTS[size - 1];
+
+const groupShirts = (shirts) => {
+  const counter = {};
+  shirts.forEach((shirt) => {
+    if (!counter[shirt.toString()]) {
+      counter[shirt.toString()] = 1;
+    } else {
+      counter[shirt.toString()]++;
+    }
+  });
+  return counter;
+};
+
+const removeMostFrequent = (volumes, size) => {
+  const res = {};
+  for (let key in volumes) {
+    res[key] = volumes[key];
+  }
+  Object.entries(volumes)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, size)
+    .forEach((k) => {
+      res[k[0]] = volumes[k[0]] - 1;
+      if (res[k[0]] <= 0) delete res[k[0]];
+    });
+  return res;
+};
+
+const collectionFromGroup = (volumes) => {
+  const subGroup = [];
+  Object.entries(volumes).forEach((entry) => {
+    if (entry[1] > 0) {
+      const sub = new Array(entry[1]);
+      subGroup.push(...sub.fill(parseInt(entry[0])));
+    }
+  });
+  return subGroup;
+};
+
+const calculate = (sortedShirts) => {
+  if (sortedShirts.length === 0) return 0;
+  const volumes = groupShirts(sortedShirts);
+  let price = sortedShirts.length * BOOK_PRICE;
+  for (let size = Object.keys(volumes).length; size > 1; size--) {
+    const subGroup = removeMostFrequent(volumes, size);
+    const collection = collectionFromGroup(subGroup);
+    price = Math.min(price, groupCost(size) + calculate(collection));
+  }
+  return price;
+};
+
+export const cost = (shirts) => {
+  if (shirts.length === 0) {
+    return 0;
+  }
+
+  return calculate(shirts.sort((a, b) => a - b));
+};
+
+====
+Guild Bank
+MEDIUM
+Brief
+Your task is to simulate your guild's bank account supporting opening/closing, withdrawals, and deposits of gold. Watch out for concurrent transactions!
+
+In most MMORPGs (Massively Multiplayer Online Role-Playing Game), a player can interact with other players by creating a guild.
+
+Depending on the game, a guild can have various activities, which can be costly. To make it easier to handle this cost, guilds create guild banks.
+
+A guild bank can be accessed in multiple ways. Players can make deposits and withdrawals, and game systems can get money from the guild too. Note: make sure the guild bank can be accessed from multiple threads/processes.
+
+It should be possible to disband the guild. This will cause the guild bank to close; operations against a closed guild bank must fail.
+
+Setup
+First, install the assignment dependencies:
+
+$ npm install
+Making the test suite pass
+You may execute the tests with:
+
+$ npm test
+
+----
+export class GuildBank {
+  openAccount() {
+    if (this._open) {
+      throw new ValueError();
+    }
+    this._open = true;
+    this._balance = 0;
+  }
+
+  closeAccount() {
+    this.verifyAccount();
+    this._open = false;
+  }
+
+  verifyAccount() {
+    if (!this.isOpen) {
+      throw new ValueError();
+    }
+  }
+
+  depositGold(amount) {
+    this.verifyAccount();
+    this.verifyDeposit(amount);
+    this._balance = this._balance + amount;
+  }
+
+  verifyDeposit(amount) {
+    if (amount < 0) {
+      throw new ValueError();
+    }
+  }
+
+  withdrawGold(amount) {
+    this.verifyAccount();
+    this.verifyWithdraw(amount);
+    this._balance = this._balance - amount;
+  }
+
+  verifyWithdraw(amount) {
+    if (amount < 0 || amount > this._balance) {
+      throw new ValueError();
+    }
+  }
+
+  get balance() {
+    this.verifyAccount();
+    return this._balance;
+  }
+
+  get isOpen() {
+    return this._open;
+  }
+}
+
+export class ValueError extends Error {}
