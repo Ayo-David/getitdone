@@ -10,7 +10,6 @@ const Toptal = () => {
     }
     return (
         <div>
-
             <input id="username-input" value={username} type="text" onChange={(e) => setUsername(e.target.value)} />
             <br />
             <input id="username-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
