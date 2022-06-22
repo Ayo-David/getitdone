@@ -2,22 +2,34 @@ import React, { Component, useState } from 'react';
 
 const LikeDislike = () => {
     const [likes, setLikes] = useState(100)
-    const [dislikes, setDisikes] = useState(25)
+    const [dislikes, setDislikes] = useState(25)
+    const [liked, setLiked] = useState(false)
+    const [disliked, setDisliked] = useState(false)
     const handleLikes = () => {
-        if (likes === 100) {
-
-            setLikes(likes + 1)
-        } else {
+        if (liked) {
             setLikes(likes - 1)
-        }
+            setLiked(!liked)
 
+        } else {
+            if (disliked) {
+                setDislikes(dislikes - 1)
+                setDisliked(!disliked)
+            }
+            setLikes(likes + 1)
+            setLiked(!liked)
+        }
     }
     const handleDislike = () => {
-        if (dislikes === 25) {
-
-            setDisikes(dislikes + 1)
+        if (disliked) {
+            setDislikes(dislikes - 1)
+            setDisliked(!disliked)
         } else {
-            setDisikes(dislikes - 1)
+            if (liked) {
+                setLikes(likes - 1)
+                setLiked(!liked)
+            }
+            setDislikes(dislikes + 1)
+            setDisliked(!disliked)
         }
 
 
@@ -27,8 +39,8 @@ const LikeDislike = () => {
         <>
             <div>
                 <h2>Like/Dislike</h2>
-                <button className="like-button" type="button" onClick={handleLikes}>Like | <span className="likes-counter">{likes}</span></button>
-                <button className="dislike-button" type="button" onClick={handleDislike}>Dislike | <span className="dislikes-counter">{dislikes}</span></button>
+                <button className="like-button" type="button" onClick={handleLikes}>Like | <span className="liked">{likes}</span></button>
+                <button className="dislike-button" type="button" onClick={handleDislike}>Dislike | <span className="disliked">{dislikes}</span></button>
                 <span></span>
 
             </div>
